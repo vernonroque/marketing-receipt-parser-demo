@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Receipt Parser API — Live Demo</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <!-- reCAPTCHA v3 -->
+  <script src="https://www.google.com/recaptcha/api.js?render=YOUR_RECAPTCHA_SITE_KEY"></script>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Background grid -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">▣</span>
+        <span class="logo-text">ReceiptParser<span class="logo-accent">API</span></span>
+      </div>
+      <a href="https://rapidapi.com/YOUR_RAPIDAPI_PROFILE" target="_blank" class="btn-subscribe">
+        Subscribe on RapidAPI →
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-tag">LIVE DEMO</div>
+    <h1 class="hero-title">
+      Drop a receipt.<br />
+      <span class="hero-title-accent">Get structured data.</span>
+    </h1>
+    <p class="hero-subtitle">
+      Upload any receipt image and watch it get parsed into clean, structured JSON instantly.
+      No signup required.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">99%</span>
+        <span class="stat-label">Accuracy</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">&lt;2s</span>
+        <span class="stat-label">Response Time</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">50+</span>
+        <span class="stat-label">Fields Extracted</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Area -->
+  <section class="demo-section">
+    <div class="demo-container">
+
+      <!-- Left: Upload Panel -->
+      <div class="panel upload-panel">
+        <div class="panel-label">INPUT</div>
+
+        <!-- Sample Receipts -->
+        <div class="samples-row">
+          <span class="samples-label">Try a sample:</span>
+          <button class="sample-btn" data-sample="restaurant">🍕 Restaurant</button>
+          <button class="sample-btn" data-sample="grocery">🛒 Grocery</button>
+          <button class="sample-btn" data-sample="gas">⛽ Gas Station</button>
+        </div>
+
+        <!-- Drop Zone -->
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-inner">
+            <div class="dropzone-icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <rect x="8" y="6" width="32" height="36" rx="3" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 14h16M16 20h16M16 26h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="36" cy="36" r="8" fill="var(--accent)" />
+                <path d="M36 32v8M32 36h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p class="dropzone-text">Drag & drop your receipt here</p>
+            <p class="dropzone-subtext">JPG, PNG, or PDF · Max 5MB</p>
+            <label class="btn-upload" for="file-input">Choose File</label>
+            <input type="file" id="file-input" accept="image/jpeg,image/png,application/pdf" hidden />
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-area" id="preview-area" style="display:none;">
+          <img id="preview-img" src="" alt="Receipt preview" />
+          <button class="btn-clear" id="btn-clear">✕ Remove</button>
+        </div>
+
+        <!-- Parse Button -->
+        <button class="btn-parse" id="btn-parse" disabled>
+          <span class="btn-parse-text">Parse Receipt</span>
+          <span class="btn-parse-arrow">→</span>
+        </button>
+
+        <!-- Error Message -->
+        <div class="error-msg" id="error-msg" style="display:none;"></div>
+      </div>
+
+      <!-- Divider Arrow -->
+      <div class="panel-arrow">
+        <div class="arrow-track">
+          <div class="arrow-dot"></div>
+          <div class="arrow-dot"></div>
+          <div class="arrow-dot"></div>
+        </div>
+      </div>
+
+      <!-- Right: Output Panel -->
+      <div class="panel output-panel">
+        <div class="panel-label">OUTPUT</div>
+
+        <!-- Idle State -->
+        <div class="output-idle" id="output-idle">
+          <div class="idle-icon">{ }</div>
+          <p class="idle-text">Your parsed data will appear here</p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="output-loading" id="output-loading" style="display:none;">
+          <div class="loader-bars">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <p class="loading-text">Parsing receipt<span class="loading-dots"></span></p>
+        </div>
+
+        <!-- Result State -->
+        <div class="output-result" id="output-result" style="display:none;">
+          <div class="result-header">
+            <div class="result-badge">✓ Parsed Successfully</div>
+            <div class="result-time" id="result-time"></div>
+          </div>
+
+          <!-- Parsed Cards -->
+          <div class="result-cards" id="result-cards"></div>
+
+          <!-- Raw JSON toggle -->
+          <button class="btn-toggle-json" id="btn-toggle-json">View Raw JSON ↓</button>
+          <div class="json-block" id="json-block" style="display:none;">
+            <pre id="json-output"></pre>
+          </div>
+
+          <!-- CTA -->
+          <div class="result-cta">
+            <p class="cta-text">Want full access? Subscribe for unlimited parsing.</p>
+            <a href="https://rapidapi.com/YOUR_RAPIDAPI_PROFILE" target="_blank" class="btn-cta">
+              Get Full Access on RapidAPI →
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-section">
+    <h2 class="how-title">How It Works</h2>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Upload</h3>
+          <p>Send any receipt image — restaurant, grocery, retail, gas station.</p>
+        </div>
+      </div>
+      <div class="how-connector"></div>
+      <div class="how-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Parse</h3>
+          <p>Our AI extracts every field: merchant, date, items, totals, tax, and more.</p>
+        </div>
+      </div>
+      <div class="how-connector"></div>
+      <div class="how-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Integrate</h3>
+          <p>Receive clean structured JSON ready to plug into your app.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-logo">▣ ReceiptParserAPI</span>
+      <a href="https://rapidapi.com/YOUR_RAPIDAPI_PROFILE" target="_blank" class="footer-link">Subscribe on RapidAPI</a>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
