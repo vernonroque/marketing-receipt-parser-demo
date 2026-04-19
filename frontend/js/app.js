@@ -3,7 +3,7 @@
    ============================================= */
 
 // ── Config ──────────────────────────────────────
-const RECAPTCHA_SITE_KEY = 'YOUR_RECAPTCHA_SITE_KEY'; // Replace with your reCAPTCHA v3 site key
+const RECAPTCHA_SITE_KEY = '6LfWBcAsAAAAALevYvApxaMuEExB-ga4WN_H4QSg'; // Replace with your reCAPTCHA v3 site key
 const API_ENDPOINT = '/.netlify/functions/parse-receipt'; // Netlify serverless function
 
 // ── Sample receipt images (public domain / placeholder URLs) ──
