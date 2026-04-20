@@ -170,7 +170,7 @@ async function callReceiptParserAPI(imageBuffer, mimeType) {
       'X-RapidAPI-Key': rapidApiKey,
       'X-RapidAPI-Host': rapidApiHost,
     },
-    timeout: 30000, // 30s timeout
+    timeout: 25000, // 25s timeout
   });
 
   return response.data;

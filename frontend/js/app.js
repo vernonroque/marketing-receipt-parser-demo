@@ -191,6 +191,12 @@ async function handleParse() {
       body: formData
     });
 
+    const contentType = response.headers.get('content-type');
+    
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Request timed out. Try a smaller or single-page receipt.');
+    }
+
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
     const data = await response.json();
 
