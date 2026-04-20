@@ -62,7 +62,10 @@ dropzone.addEventListener('drop', (e) => {
   if (file) handleFileSelect(file);
 });
 
-dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('click', (e) => {
+  if (e.target.closest('label') || e.target === fileInput) return;
+  fileInput.click();
+});
 
 fileInput.addEventListener('change', () => {
   if (fileInput.files[0]) handleFileSelect(fileInput.files[0]);
