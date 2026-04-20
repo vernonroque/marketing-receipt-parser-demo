@@ -10,16 +10,16 @@ const API_ENDPOINT = '/.netlify/functions/parse-receipt'; // Netlify serverless 
 // Replace these with actual hosted sample receipt images
 const SAMPLES = {
   restaurant: {
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/ReceiptSwiss.jpg/240px-ReceiptSwiss.jpg',
+    url: '../sample-receipts/restaurant-receipt.jpg',
     label: '🍕 Restaurant'
   },
   grocery: {
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/ReceiptSwiss.jpg/240px-ReceiptSwiss.jpg',
+    url: '../sample-receipts/Carulla.pdf',
     label: '🛒 Grocery'
   },
-  gas: {
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/ReceiptSwiss.jpg/240px-ReceiptSwiss.jpg',
-    label: '⛽ Gas Station'
+  gym: {
+    url: '../sample-receipts/gym-invoice.pdf',
+    label: '🏋️ Gym Invoice'
   }
 };
 
@@ -176,7 +176,7 @@ async function handleParse() {
       formData.append('receipt', currentFile);
     } else if (currentSample) {
       formData.append('sampleKey', currentSample);
-      formData.append('sampleUrl', SAMPLES[currentSample].url);
+      formData.append('sampleUrl', new URL(SAMPLES[currentSample].url, window.location.href).href);
     } else {
       throw new Error('No receipt selected.');
     }
