@@ -14,11 +14,11 @@ const SAMPLES = {
     label: '🍕 Restaurant'
   },
   grocery: {
-    url: '../sample-receipts/Carulla.pdf',
+    url: '../sample-receipts/Carulla.jpg',
     label: '🛒 Grocery'
   },
   gym: {
-    url: '../sample-receipts/gym-invoice.pdf',
+    url: '../sample-receipts/gym-invoice.jpg',
     label: '🏋️ Gym Invoice'
   }
 };
