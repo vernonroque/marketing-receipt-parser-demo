@@ -415,3 +415,22 @@ function hideError() {
 document.addEventListener('DOMContentLoaded', () => {
   displayResult(PREVIEW_SAMPLE, null, true);
 });
+
+// ── Email Capture (Netlify Forms via AJAX) ────────
+const notifyForm = document.getElementById('notifyForm');
+if (notifyForm) {
+  notifyForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new URLSearchParams(new FormData(notifyForm));
+    try {
+      await fetch('/', { method: 'POST', body: data });
+      document.getElementById('notifyRow').hidden = true;
+      document.getElementById('notifySuccess').hidden = false;
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'email_capture', { form_name: 'notify' });
+      }
+    } catch {
+      // Silent fail — native POST fallback still works without JS
+    }
+  });
+}
