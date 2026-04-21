@@ -276,7 +276,18 @@ exports.handler = async (event) => {
     };
   }
 
-  // ── 6. Call RapidAPI ────────────────────────────────────────────────────────
+  // ── 6. Log ref source ───────────────────────────────────────────────────────
+  const ipPrefix = clientIp !== 'unknown'
+    ? clientIp.split('.').slice(0, 2).join('.') + '.x.x'
+    : 'unknown';
+  console.log(JSON.stringify({
+    event: 'parse_request',
+    ref_source: fields.ref_source || 'direct',
+    ip_prefix: ipPrefix,
+    timestamp: new Date().toISOString(),
+  }));
+
+  // ── 7. Call RapidAPI ────────────────────────────────────────────────────────
   try {
     const result = await callReceiptParserAPI(fileBuffer, fileMimeType || 'image/jpeg');
 

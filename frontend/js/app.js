@@ -23,6 +23,19 @@ const SAMPLES = {
   }
 };
 
+// ── Ref Source Tracking ──────────────────────────
+function captureRef() {
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+  if (ref) {
+    sessionStorage.setItem('ref_source', ref);
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'referral_source', { source: ref });
+    }
+  }
+}
+captureRef();
+
 // ── State ────────────────────────────────────────
 let currentFile = null;
 let currentSample = null;
@@ -174,6 +187,7 @@ async function handleParse() {
     // 2. Build form data
     const formData = new FormData();
     formData.append('recaptchaToken', token);
+    formData.append('ref_source', sessionStorage.getItem('ref_source') || 'direct');
 
     if (currentFile) {
       formData.append('receipt', currentFile);
