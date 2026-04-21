@@ -678,25 +678,6 @@ body {
 }
 
 /* JSON Block */
-.btn-toggle-json {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  padding: 7px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.btn-toggle-json:hover {
-  border-color: var(--border-active);
-  color: var(--accent);
-}
-
 .json-block {
   background: #07070d;
   border: 1px solid var(--border);

@@ -76,7 +76,7 @@ const resultCards    = document.getElementById('result-cards');
 const resultTime     = document.getElementById('result-time');
 const jsonOutput     = document.getElementById('json-output');
 const jsonBlock      = document.getElementById('json-block');
-const btnToggleJson  = document.getElementById('btn-toggle-json');
+// btn-toggle-json removed
 const sampleBtns     = document.querySelectorAll('.sample-btn');
 
 // ── Drag & Drop ──────────────────────────────────
@@ -280,13 +280,10 @@ function displayResult(data, elapsed, isExample = false) {
     resultCards.innerHTML = '';
     jsonOutput.textContent = JSON.stringify(data, null, 2);
     jsonBlock.style.display = 'block';
-    btnToggleJson.style.display = 'none';
   } else {
-    // Real parse: full card display + collapsible JSON
+    // Real parse: full card display + JSON shown automatically
     outputResult.querySelector('.result-header').style.display = '';
-    btnToggleJson.style.display = '';
-    jsonBlock.style.display = 'none';
-    btnToggleJson.textContent = 'View Raw JSON ↓';
+    jsonBlock.style.display = 'block';
 
     const badge = outputResult.querySelector('.result-badge');
     badge.textContent = '✓ Parsed Successfully';
@@ -347,12 +344,6 @@ function formatCurrency(amount, currency) {
   return `${symbol}${num.toFixed(2)}`;
 }
 
-// ── JSON Toggle ──────────────────────────────────
-btnToggleJson.addEventListener('click', () => {
-  const isVisible = jsonBlock.style.display !== 'none';
-  jsonBlock.style.display = isVisible ? 'none' : 'block';
-  btnToggleJson.textContent = isVisible ? 'View Raw JSON ↓' : 'Hide Raw JSON ↑';
-});
 
 // ── UI State Helpers ─────────────────────────────
 function setLoading(isLoading) {
@@ -380,7 +371,6 @@ function showIdle() {
 function resetOutput() {
   showIdle();
   jsonBlock.style.display = 'none';
-  btnToggleJson.textContent = 'View Raw JSON ↓';
 }
 
 function showError(message) {
