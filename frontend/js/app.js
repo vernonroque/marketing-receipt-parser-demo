@@ -76,6 +76,7 @@ const resultCards    = document.getElementById('result-cards');
 const resultTime     = document.getElementById('result-time');
 const jsonOutput     = document.getElementById('json-output');
 const jsonBlock      = document.getElementById('json-block');
+const btnCopyJson    = document.getElementById('btn-copy-json');
 // btn-toggle-json removed
 const sampleBtns     = document.querySelectorAll('.sample-btn');
 
@@ -196,6 +197,33 @@ function disableParseButton() {
 }
 
 btnParse.addEventListener('click', handleParse);
+
+// ── Copy JSON Button ──────────────────────────────
+btnCopyJson.addEventListener('click', () => {
+  const text = jsonOutput.textContent;
+  if (!text) return;
+
+  const onCopied = () => {
+    btnCopyJson.textContent = 'Copied!';
+    btnCopyJson.classList.add('copied');
+    setTimeout(() => {
+      btnCopyJson.textContent = 'Copy JSON';
+      btnCopyJson.classList.remove('copied');
+    }, 2000);
+  };
+
+  navigator.clipboard.writeText(text).then(onCopied).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    onCopied();
+  });
+});
 
 async function handleParse() {
   hideError();
