@@ -870,11 +870,19 @@ body {
 }
 
 /* =============================================
+   MOBILE STICKY CTA
+   ============================================= */
+.mobile-sticky-cta {
+  display: none;
+}
+
+/* =============================================
    RESPONSIVE
    ============================================= */
 @media (max-width: 768px) {
   .demo-container {
-    grid-template-columns: 1fr;
+    /* minmax(0,1fr) prevents the track from expanding beyond the viewport */
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .panel-arrow {
@@ -919,5 +927,50 @@ body {
   .btn-subscribe {
     font-size: 0.78rem;
     padding: 7px 14px;
+  }
+
+  /* Sticky CTA bar */
+  .mobile-sticky-cta {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--bg-panel);
+    border-top: 1px solid var(--border-active);
+    padding: 10px 16px 14px;
+    text-align: center;
+  }
+
+  .mobile-sticky-btn {
+    display: block;
+    background: var(--accent);
+    color: #0a0a0f;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
+  /* Prevent page content from hiding behind sticky bar */
+  body {
+    padding-bottom: 72px;
+  }
+
+  /* Reduce horizontal padding so panels have more breathing room */
+  .demo-section {
+    padding: 0 1rem 80px;
+  }
+
+  /* Panels fill the constrained column; section padding provides the side inset */
+  .panel {
+    width: 100%;
+  }
+
+  .hero{
+    margin: 0 auto;
   }
 }
