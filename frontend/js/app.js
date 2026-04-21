@@ -23,6 +23,27 @@ const SAMPLES = {
   }
 };
 
+// ── Static Preview Sample ────────────────────────
+const PREVIEW_SAMPLE = {
+  merchant_name: "The Golden Fork",
+  date: "2025-04-18",
+  time: "19:42",
+  address: "120 Main St, Austin, TX 78701",
+  line_items: [
+    { description: "Ribeye Steak", price: 42.00 },
+    { description: "Caesar Salad", price: 14.50 },
+    { description: "Craft IPA (2x)", price: 18.00 },
+    { description: "Crème Brûlée", price: 9.75 }
+  ],
+  subtotal: 84.25,
+  tax: 6.96,
+  tip: 15.00,
+  total: 106.21,
+  payment_method: "Visa •••• 4242",
+  currency: "USD",
+  receipt_number: "RCP-20250418-0047"
+};
+
 // ── Ref Source Tracking ──────────────────────────
 function captureRef() {
   const params = new URLSearchParams(window.location.search);
@@ -245,7 +266,7 @@ function getRecaptchaToken() {
 }
 
 // ── Display Result ───────────────────────────────
-function displayResult(data, elapsed) {
+function displayResult(data, elapsed, isExample = false) {
   setLoading(false);
 
   // Show result panel
@@ -253,25 +274,40 @@ function displayResult(data, elapsed) {
   outputLoading.style.display = 'none';
   outputResult.style.display = 'block';
 
-  // Set time
-  resultTime.textContent = `Parsed in ${elapsed}s`;
+  if (isExample) {
+    // Example preview: just show raw JSON, no cards or header chrome
+    outputResult.querySelector('.result-header').style.display = 'none';
+    resultCards.innerHTML = '';
+    jsonOutput.textContent = JSON.stringify(data, null, 2);
+    jsonBlock.style.display = 'block';
+    btnToggleJson.style.display = 'none';
+  } else {
+    // Real parse: full card display + collapsible JSON
+    outputResult.querySelector('.result-header').style.display = '';
+    btnToggleJson.style.display = '';
+    jsonBlock.style.display = 'none';
+    btnToggleJson.textContent = 'View Raw JSON ↓';
 
-  // Build result cards
-  resultCards.innerHTML = '';
-  const fields = buildDisplayFields(data);
-  fields.forEach((field, i) => {
-    const card = document.createElement('div');
-    card.className = 'result-card';
-    card.style.animationDelay = `${i * 0.05}s`;
-    card.innerHTML = `
-      <span class="card-key">${field.key}</span>
-      <span class="card-value ${field.highlight ? 'highlight' : ''}">${field.value}</span>
-    `;
-    resultCards.appendChild(card);
-  });
+    const badge = outputResult.querySelector('.result-badge');
+    badge.textContent = '✓ Parsed Successfully';
+    badge.className = 'result-badge';
+    resultTime.textContent = `Parsed in ${elapsed}s`;
 
-  // Set raw JSON
-  jsonOutput.textContent = JSON.stringify(data, null, 2);
+    resultCards.innerHTML = '';
+    const fields = buildDisplayFields(data);
+    fields.forEach((field, i) => {
+      const card = document.createElement('div');
+      card.className = 'result-card';
+      card.style.animationDelay = `${i * 0.05}s`;
+      card.innerHTML = `
+        <span class="card-key">${field.key}</span>
+        <span class="card-value ${field.highlight ? 'highlight' : ''}">${field.value}</span>
+      `;
+      resultCards.appendChild(card);
+    });
+
+    jsonOutput.textContent = JSON.stringify(data, null, 2);
+  }
 }
 
 function buildDisplayFields(data) {
@@ -356,3 +392,8 @@ function hideError() {
   errorMsg.style.display = 'none';
   errorMsg.textContent = '';
 }
+
+// ── Page Load Preview ────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  displayResult(PREVIEW_SAMPLE, null, true);
+});
