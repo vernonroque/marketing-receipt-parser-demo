@@ -39,7 +39,7 @@ const PREVIEW_SAMPLE = {
   tax: 6.96,
   tip: 15.00,
   total: 106.21,
-  payment_method: "Visa •••• 4242",
+  payment_method: "Visa",
   currency: "USD",
   receipt_number: "RCP-20250418-0047"
 };
