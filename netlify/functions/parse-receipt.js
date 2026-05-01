@@ -151,6 +151,8 @@ async function callReceiptParserAPI(imageBuffer, mimeType) {
   const rapidApiKey = process.env.RAPIDAPI_KEY;
   const rapidApiHost = process.env.RAPIDAPI_HOST; // e.g. 'receipt-parser3.p.rapidapi.com'
   const rapidApiEndpoint = process.env.RAPIDAPI_ENDPOINT; // e.g. 'https://receipt-parser3.p.rapidapi.com/parse'
+  const railwayAPIEndpoint = process.env.RAILWAY_API_ENDPOINT; // e.g. 'https://receipt-parser-railway-production.up.railway.app/parse'
+  const myApiKey = process.env.MY_API_KEY;
 
   if (!rapidApiKey || !rapidApiHost || !rapidApiEndpoint) {
     throw new Error('RapidAPI environment variables are not configured.');
@@ -164,11 +166,21 @@ async function callReceiptParserAPI(imageBuffer, mimeType) {
     contentType: mimeType,
   });
 
-  const response = await axios.post(rapidApiEndpoint, form, {
+  // const response = await axios.post(rapidApiEndpoint, form, {
+  //   headers: {
+  //     ...form.getHeaders(),
+  //     'X-RapidAPI-Key': rapidApiKey,
+  //     'X-RapidAPI-Host': rapidApiHost,
+  //   },
+  //   timeout: 25000, // 25s timeout
+  // });
+
+  // return response.data;
+
+   const response = await axios.post(railwayAPIEndpoint, form, {
     headers: {
       ...form.getHeaders(),
-      'X-RapidAPI-Key': rapidApiKey,
-      'X-RapidAPI-Host': rapidApiHost,
+      'API-Key': myApiKey
     },
     timeout: 25000, // 25s timeout
   });
