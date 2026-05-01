@@ -177,9 +177,11 @@ async function callReceiptParserAPI(imageBuffer, mimeType) {
 
   // return response.data;
 
+  //this is for api call directly to railway without going through rapidapi
    const response = await axios.post(railwayAPIEndpoint, form, {
     headers: {
       ...form.getHeaders(),
+      'accept': 'application/json',
       'Authorization': `Bearer ${myApiKey}`
     },
     timeout: 25000, // 25s timeout
