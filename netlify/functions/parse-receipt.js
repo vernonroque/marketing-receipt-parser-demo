@@ -166,28 +166,28 @@ async function callReceiptParserAPI(imageBuffer, mimeType) {
     contentType: mimeType,
   });
 
-  // const response = await axios.post(rapidApiEndpoint, form, {
-  //   headers: {
-  //     ...form.getHeaders(),
-  //     'X-RapidAPI-Key': rapidApiKey,
-  //     'X-RapidAPI-Host': rapidApiHost,
-  //   },
-  //   timeout: 25000, // 25s timeout
-  // });
-
-  // return response.data;
-
-  //this is for api call directly to railway without going through rapidapi
-   const response = await axios.post(railwayAPIEndpoint, form, {
+  const response = await axios.post(rapidApiEndpoint, form, {
     headers: {
       ...form.getHeaders(),
-      'accept': 'application/json',
-      'Authorization': `Bearer ${myApiKey}`
+      'X-RapidAPI-Key': rapidApiKey,
+      'X-RapidAPI-Host': rapidApiHost,
     },
     timeout: 25000, // 25s timeout
   });
 
   return response.data;
+
+  //this is for api call directly to railway without going through rapidapi
+  //  const response = await axios.post(railwayAPIEndpoint, form, {
+  //   headers: {
+  //     ...form.getHeaders(),
+  //     'accept': 'application/json',
+  //     'Authorization': `Bearer ${myApiKey}`
+  //   },
+  //   timeout: 25000, // 25s timeout
+  // });
+
+  //return response.data;
 }
 
 // ── CORS Headers ──────────────────────────────────────────────────────────────
