@@ -180,7 +180,7 @@ async function callReceiptParserAPI(imageBuffer, mimeType) {
    const response = await axios.post(railwayAPIEndpoint, form, {
     headers: {
       ...form.getHeaders(),
-      'API-Key': myApiKey
+      'Authorization': `Bearer ${myApiKey}`
     },
     timeout: 25000, // 25s timeout
   });
